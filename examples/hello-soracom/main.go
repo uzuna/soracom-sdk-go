@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"github.com/k0kubun/pp"
-	"github.com/soracom/soracom-sdk-go"
+	"github.com/uzuna/soracom-sdk-go"
 )
 
 func main() {
