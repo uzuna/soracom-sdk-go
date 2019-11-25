@@ -1,4 +1,4 @@
-module github.com/soracom/soracom-sdk-go
+module github.com/uzuna/soracom-sdk-go
 
 go 1.12
 
