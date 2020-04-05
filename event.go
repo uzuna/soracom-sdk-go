@@ -6,6 +6,7 @@ import (
 	"strconv"
 )
 
+// EventDateTimeConst is the time value that can be specified when execute a rule, enable, or disable
 type EventDateTimeConst string
 
 func (x EventDateTimeConst) String() string {
@@ -13,15 +14,26 @@ func (x EventDateTimeConst) String() string {
 }
 
 const (
-	IMMEDIATELY             = "IMMEDIATELY"
-	AFTER_ONE_DAY           = "AFTER_ONE_DAY"
-	BEGINNING_OF_NEXT_DAY   = "BEGINNING_OF_NEXT_DAY"
-	BEGINNING_OF_NEXT_MONTH = "BEGINNING_OF_NEXT_MONTH"
-	NEVER                   = "NEVER"
+	// EventDateTimeImmediately is immediately
+	EventDateTimeImmediately EventDateTimeConst = "IMMEDIATELY"
+
+	// EventDateTimeAfterOneDay is one day (24 hours) later
+	EventDateTimeAfterOneDay = "AFTER_ONE_DAY"
+
+	// EventDateTimeBeginningOfNextDay is ...
+	EventDateTimeBeginningOfNextDay = "BEGINNING_OF_NEXT_DAY"
+
+	// EventDateTimeBeginningOfNextMonth is ...
+	EventDateTimeBeginningOfNextMonth = "BEGINNING_OF_NEXT_MONTH"
+
+	// EventDateTimeNever is ...
+	EventDateTimeNever = "NEVER"
 )
 
+// EventStatus is status of EventHandler
 type EventStatus string
 
+// EventStatus is one of active or inactive
 const (
 	EventStatusActive   EventStatus = "active"
 	EventStatusInactive EventStatus = "inactive"
