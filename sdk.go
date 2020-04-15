@@ -336,6 +336,10 @@ func parseLinkHeader(linkHeader string) *PaginationKeys {
 			if err != nil {
 				continue
 			}
+			// skip when has not last_evaluated_key
+			if !strings.Contains(s[1], "=") {
+				continue
+			}
 			lek := url.Query()["last_evaluated_key"][0]
 			rel := strings.Split(s[1], "=")[1]
 			if rel == "prev" {
