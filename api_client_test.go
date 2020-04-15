@@ -789,6 +789,27 @@ func TestListSubscribersWithTypeFilter(t *testing.T) {
 	//t.Logf("subs3 == %v", subs3)
 }
 
+func TestSearchSubscribers(t *testing.T) {
+	apiClient.verbose = true
+	defer func() {
+		apiClient.verbose = false
+	}()
+	imsi := createdSubscribers[0].IMSI
+	options := &SearchSubscribersOptions{
+		IMSI: []string{imsi},
+	}
+	subs, _, err := apiClient.SearchSubscribers(options)
+	if err != nil {
+		t.Fatalf("SearchSubscribers() failed: %v", err.Error())
+	}
+	if len(subs) != 1 {
+		t.Fatalf("At least 1 subscriber is required {%d}", len(subs))
+	}
+	if subs[0].IMSI != imsi {
+		t.Fatalf("Unmatch IMSI want %s got %s", imsi, subs[0].IMSI)
+	}
+}
+
 func TestGetSubscriber(t *testing.T) {
 	subs, _, err := apiClient.ListSubscribers(&ListSubscribersOptions{
 		Limit: 1,

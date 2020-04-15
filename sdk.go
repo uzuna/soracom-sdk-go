@@ -1146,6 +1146,84 @@ func parseListSessionEvents(r io.Reader) ([]SessionEvent, error) {
 	return events, err
 }
 
+type SearchType string
+
+func (s SearchType) String() string {
+	return string(s)
+}
+
+const (
+	SearchTypeOr  SearchType = "or"
+	SearchTypeAnd SearchType = "and"
+)
+
+// SearchSubscribersOptions keeps information of search subscribers
+type SearchSubscribersOptions struct {
+	Name             []string   `json:"name"`
+	Group            []string   `json:"group"`
+	IMSI             []string   `json:"imsi"`
+	MSISDN           []string   `json:"msisdn"`
+	ICCID            []string   `json:"iccid"`
+	SerialNumber     []string   `json:"serial_number"`
+	Tag              []string   `json:"tag"`
+	Limit            int        `json:"limit"`
+	LastEvaluatedKey string     `json:"last_evaluated_key"`
+	SearchType       SearchType `json:"search_type"`
+}
+
+func (sso *SearchSubscribersOptions) String() string {
+	var s = make([]string, 0, 10)
+	f := func(key string, values []string) string {
+		b := strings.Builder{}
+		for _, value := range values {
+			b.WriteString(fmt.Sprintf("%s=%s", key, value))
+		}
+		return b.String()
+	}
+	if len(sso.Name) > 0 {
+		s = append(s, f("name", sso.Name))
+	}
+	if len(sso.Group) > 0 {
+		s = append(s, f("group", sso.Group))
+	}
+	if len(sso.IMSI) > 0 {
+		s = append(s, f("imsi", sso.IMSI))
+	}
+	if len(sso.MSISDN) > 0 {
+		s = append(s, f("msisdn", sso.MSISDN))
+	}
+	if len(sso.ICCID) > 0 {
+		s = append(s, f("iccid", sso.ICCID))
+	}
+	if len(sso.SerialNumber) > 0 {
+		s = append(s, f("serial_number", sso.SerialNumber))
+	}
+	if len(sso.Tag) > 0 {
+		s = append(s, f("tag", sso.Tag))
+	}
+
+	if sso.Limit < 1 {
+		sso.Limit = 10
+	}
+	s = append(s, fmt.Sprintf("limit=%d", sso.Limit))
+	if sso.LastEvaluatedKey != "" {
+		s = append(s, fmt.Sprintf("last_evaluated_key=%s", sso.LastEvaluatedKey))
+	}
+
+	searchType := SearchTypeAnd
+	switch sso.SearchType {
+	case SearchTypeOr:
+		searchType = SearchTypeOr
+	}
+	s = append(s, fmt.Sprintf("search_type=%s", searchType))
+
+	return strings.Join(s, "&")
+}
+
+func parseSearchSubscribersResponse(resp *http.Response) ([]Subscriber, *PaginationKeys, error) {
+	return parseListSubscribersResponse(resp)
+}
+
 func parseCreatedCredential(resp *http.Response) (*CreatedCredential, error) {
 	dec := json.NewDecoder(resp.Body)
 	var cc CreatedCredential

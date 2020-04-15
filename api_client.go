@@ -1259,3 +1259,27 @@ func (ac *APIClient) CreateCredentialWithName(name string, options *CredentialOp
 
 	return cc, nil
 }
+
+// SearchSubscribers lists subscribers for the operator
+func (ac *APIClient) SearchSubscribers(options *SearchSubscribersOptions) ([]Subscriber, *PaginationKeys, error) {
+	params := &apiParams{
+		method: "GET",
+		path:   "/v1/query/subscribers",
+	}
+	if options != nil {
+		params.query = options.String()
+	}
+
+	resp, err := ac.callAPI(params)
+	if err != nil {
+		return nil, nil, err
+	}
+	defer resp.Body.Close()
+
+	subscribers, paginationKeys, err := parseSearchSubscribersResponse(resp)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	return subscribers, paginationKeys, nil
+}
