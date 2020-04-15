@@ -795,18 +795,23 @@ func TestSearchSubscribers(t *testing.T) {
 		apiClient.verbose = false
 	}()
 	imsi := createdSubscribers[0].IMSI
+	imsi1 := createdSubscribers[1].IMSI
 	options := &SearchSubscribersOptions{
-		IMSI: []string{imsi},
+		IMSI:       []string{imsi, imsi1},
+		SearchType: SearchTypeOr,
 	}
 	subs, _, err := apiClient.SearchSubscribers(options)
 	if err != nil {
 		t.Fatalf("SearchSubscribers() failed: %v", err.Error())
 	}
-	if len(subs) != 1 {
-		t.Fatalf("At least 1 subscriber is required {%d}", len(subs))
+	if len(subs) != 2 {
+		t.Fatalf("At least 2 subscriber is required {%d}", len(subs))
 	}
 	if subs[0].IMSI != imsi {
 		t.Fatalf("Unmatch IMSI want %s got %s", imsi, subs[0].IMSI)
+	}
+	if subs[1].IMSI != imsi1 {
+		t.Fatalf("Unmatch IMSI want %s got %s", imsi1, subs[1].IMSI)
 	}
 }
 

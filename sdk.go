@@ -1176,34 +1176,33 @@ type SearchSubscribersOptions struct {
 }
 
 func (sso *SearchSubscribersOptions) String() string {
-	var s = make([]string, 0, 10)
-	f := func(key string, values []string) string {
-		b := strings.Builder{}
+	var s []string
+	f := func(s []string, key string, values []string) []string {
 		for _, value := range values {
-			b.WriteString(fmt.Sprintf("%s=%s", key, value))
+			s = append(s, fmt.Sprintf("%s=%s", key, value))
 		}
-		return b.String()
+		return s
 	}
 	if len(sso.Name) > 0 {
-		s = append(s, f("name", sso.Name))
+		s = f(s, "name", sso.Name)
 	}
 	if len(sso.Group) > 0 {
-		s = append(s, f("group", sso.Group))
+		s = f(s, "group", sso.Group)
 	}
 	if len(sso.IMSI) > 0 {
-		s = append(s, f("imsi", sso.IMSI))
+		s = f(s, "imsi", sso.IMSI)
 	}
 	if len(sso.MSISDN) > 0 {
-		s = append(s, f("msisdn", sso.MSISDN))
+		s = f(s, "msisdn", sso.MSISDN)
 	}
 	if len(sso.ICCID) > 0 {
-		s = append(s, f("iccid", sso.ICCID))
+		s = f(s, "iccid", sso.ICCID)
 	}
 	if len(sso.SerialNumber) > 0 {
-		s = append(s, f("serial_number", sso.SerialNumber))
+		s = f(s, "serial_number", sso.SerialNumber)
 	}
 	if len(sso.Tag) > 0 {
-		s = append(s, f("tag", sso.Tag))
+		s = f(s, "tag", sso.Tag)
 	}
 
 	if sso.Limit < 1 {
